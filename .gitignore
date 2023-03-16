@@ -135,3 +135,5 @@ internal/scraper
 cmd/signature-scraper-srv
 services/signature-scraper-srv
 
+tmp/
+

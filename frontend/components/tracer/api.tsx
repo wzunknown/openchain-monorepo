@@ -73,6 +73,7 @@ export type APIResponseSuccess<T> = {
 };
 export type APIResponse<T> = APIResponseError | APIResponseSuccess<T>;
 export const doApiRequest = async <T,>(path: string, init?: RequestInit): Promise<T> => {
+    console.log(`[wz] ${path}`);
     return fetch(`${apiEndpoint()}${path}`, init)
         .then((res) => res.json())
         .then((json) => json as APIResponse<T>)

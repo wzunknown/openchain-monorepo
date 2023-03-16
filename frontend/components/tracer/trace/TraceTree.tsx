@@ -195,7 +195,23 @@ export const TraceTree = (props: TraceTreeProps) => {
                 slot = baseSlot;
             }
         });
-
+        // ======= wz =======
+        // add highlight to default
+        Object.keys(traceMetadata.nodesByPath)
+            .filter((x) => {
+                for (let node_path of globalThis.epg_highlight_nodes) {
+                    if (node_path.startsWith(x)) {
+                        return true;
+                    }
+                }
+                return false;
+            })
+            .forEach((x) => {
+                console.log(`filter: ${x}`);
+                defaultExpanded.push(x);
+            });
+        defaultExpanded = [...new Set(defaultExpanded)];
+        // ==================
         setExpanded(defaultExpanded);
         setStorageMetadata(newStorageMetadata);
     }, [traceResult, traceMetadata]);
@@ -463,6 +479,11 @@ export const TraceTree = (props: TraceTreeProps) => {
             throw new Error('unexpected trace node', node);
         }
     };
+
+    // ==================== wz =======================
+    // const highlight_node = (node_path: string) => {};
+    
+    // ===============================================
 
     const treeItems = React.useMemo(() => {
         return recursivelyGenerateTree(traceResult.entrypoint);

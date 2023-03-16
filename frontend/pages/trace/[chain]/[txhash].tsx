@@ -18,6 +18,7 @@ import { defaultTokenMetadata, TokenMetadata, TokenMetadataContext } from '@comp
 import { TransactionMetadata, TransactionMetadataContext } from '@components/tracer/metadata/transaction';
 import { precompiles } from '@components/tracer/precompiles';
 import { TraceTree } from '@components/tracer/trace/TraceTree';
+import { EPGInfo } from '@components/tracer/epg/EPGInfo';
 import { TransactionInfo } from '@components/tracer/transaction-info/TransactionInfo';
 import { Result, TraceMetadata } from '@components/tracer/types';
 import { ValueChange } from '@components/tracer/value-change/ValueChange';
@@ -332,6 +333,13 @@ export default function TransactionViewer() {
         }
     }
 
+    let epgInfo;
+    if (true) {
+        epgInfo = (
+            <EPGInfo />
+        );
+    }
+
     let traceTree;
     if (traceResult && traceMetadata) {
         traceTree = (
@@ -385,6 +393,26 @@ export default function TransactionViewer() {
                             }}
                         >
                             {transactionActions}
+                        </Box>
+                    </>
+                ) : null}
+
+                {epgInfo ? (
+                    <>
+                        <Typography variant={'h6'}>EPG Results</Typography>
+                        <Box
+                            sx={{
+                                overflowX: {
+                                    xs: 'auto',
+                                    md: 'inherit',
+                                },
+                                paddingBottom: {
+                                    xs: '1em',
+                                    md: 'inherit',
+                                },
+                            }}
+                        >
+                            {epgInfo}
                         </Box>
                     </>
                 ) : null}

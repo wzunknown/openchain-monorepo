@@ -166,6 +166,7 @@ export const DataRenderer = (props: DataRendererProps) => {
         );
 
         if (paramType.baseType === 'address') {
+            const address = stringified.toLowerCase();
             rendered = (
                 <Tooltip
                     arrow
@@ -174,10 +175,9 @@ export const DataRenderer = (props: DataRendererProps) => {
                         <span
                             style={{ cursor: 'pointer' }}
                             onClick={() => {
-                                const address = stringified.toLowerCase();
 
                                 let newLabel = prompt(
-                                    'Enter a new label',
+                                    `Enter a new label for ${address}`,
                                     (props.labels || labelMetadata.labels)[address] || address,
                                 );
                                 if (newLabel !== null && newLabel !== address) {
@@ -207,7 +207,7 @@ export const DataRenderer = (props: DataRendererProps) => {
                                 }
                             }}
                         >
-                            [Edit Label]
+                            [Edit Label] {address}
                         </span>
                     }
                 >
