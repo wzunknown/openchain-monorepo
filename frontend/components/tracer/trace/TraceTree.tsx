@@ -1,6 +1,7 @@
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import TreeView from '@mui/lab/TreeView';
+import { TextField, Box } from '@mui/material';
 import BN from 'bn.js';
 import { keccak256, ParamType } from 'ethers';
 import * as React from 'react';
@@ -244,6 +245,8 @@ export const TraceTree = (props: TraceTreeProps) => {
             .then((res) => {
                 setStorageMetadata((prevMetadata: StorageMetadata) => {
                     let newMetadata = { ...prevMetadata };
+                    // error hook
+                    return newMetadata;
 
                     let { slots: allSlots, allStructs, arrays } = res;
 
@@ -482,7 +485,12 @@ export const TraceTree = (props: TraceTreeProps) => {
 
     // ==================== wz =======================
     // const highlight_node = (node_path: string) => {};
-    
+    const [wz_show_path_value, wz_set_show_path_value] = React.useState('');
+    const wz_handle_show_path = (ev: React.KeyboardEvent) => {
+        if (ev.key === 'Enter' && wz_show_path_value in traceMetadata.nodesByPath) {
+            expandToNode(wz_show_path_value);
+        }
+    };
     // ===============================================
 
     const treeItems = React.useMemo(() => {
@@ -490,6 +498,12 @@ export const TraceTree = (props: TraceTreeProps) => {
     }, [showStorageChanges, traceResult, storageMetadata]);
     const l = (
         <>
+            <Box style={{paddingTop: '10px', paddingBottom: '10px'}}>
+                <TextField label='show path'
+                    onKeyDown={wz_handle_show_path}
+                    value={wz_show_path_value}
+                    onChange={(ev) => wz_set_show_path_value(ev.target.value)} />
+            </Box>
             <TreeView
                 aria-label="rich object"
                 defaultCollapseIcon={<ExpandMoreIcon />}

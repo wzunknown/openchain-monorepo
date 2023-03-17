@@ -133,9 +133,16 @@ export const SstoreTraceTreeItem = (props: SstoreTraceTreeItemProps) => {
             </Grid>
         </>
     );
+    // ================ wz ====================
+    let nodeHighlightStyle = '';
+    if (globalThis.epg_highlight_slots.includes(node.path)) {
+        nodeHighlightStyle = globalThis.epg_highlight_stylemap[node.path];
+    }
+    // ========================================
 
     let treeContent = (
         <>
+        <span style={{'text-decoration': nodeHighlightStyle}}>
             <TraceTreeNodeLabel nodeType={'sstore'} nodeColor={'#c33ff3'} onNodeClick={() => setOpen(true)} />
             &nbsp;
             <WithSeparator separator={<>,&nbsp;</>}>
@@ -164,6 +171,7 @@ export const SstoreTraceTreeItem = (props: SstoreTraceTreeItemProps) => {
                     }
                 })}
             </WithSeparator>
+        </span>
         </>
     );
 

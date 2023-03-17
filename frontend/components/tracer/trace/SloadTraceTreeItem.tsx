@@ -128,8 +128,16 @@ export const SloadTraceTreeItem = (props: SloadTraceTreeItemProps) => {
         </>
     );
 
+    // ================ wz ====================
+    let nodeHighlightStyle = '';
+    if (globalThis.epg_highlight_slots.includes(node.path)) {
+        nodeHighlightStyle = globalThis.epg_highlight_stylemap[node.path];
+    }
+    // ========================================
+
     let treeContent = (
         <>
+        <span style={{'text-decoration': nodeHighlightStyle}}>
             <TraceTreeNodeLabel nodeType={'sload'} nodeColor={'#407ee7'} onNodeClick={() => setOpen(true)} />
             &nbsp;
             <WithSeparator separator={<>,&nbsp;</>}>
@@ -142,6 +150,7 @@ export const SloadTraceTreeItem = (props: SloadTraceTreeItemProps) => {
                     );
                 })}
             </WithSeparator>
+        </span>
         </>
     );
 

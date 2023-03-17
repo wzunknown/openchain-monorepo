@@ -10,6 +10,7 @@ import SyncAltIcon from '@mui/icons-material/SyncAlt';
 
 // TODO: tmp using local datas
 import _map_data from '../../../tmp/e2e4-map.json'
+import _highlight_data from '../../../tmp/e2e4-highlight.json'
 interface MappingObject {
     [key: string]: string;
 }
@@ -21,9 +22,15 @@ const callId_to_path: MappingObject = Object.entries(path_to_callId).reduce((obj
 
 declare global {
     var epg_highlight_nodes: string[];
+    var epg_highlight_slots: string[];
+    var epg_highlight_stylemap: MappingObject;
 }
 
-globalThis.epg_highlight_nodes = ['0.30.8.23', '0.30.8.23.1', '0.30.8.23.1.1'];
+globalThis.epg_highlight_nodes = Object.keys(_highlight_data['nodes']);
+globalThis.epg_highlight_slots = Object.keys(_highlight_data['slots']);
+
+globalThis.epg_highlight_stylemap = {..._highlight_data['nodes'], ..._highlight_data['slots']};
+// globalThis.epg_highlight_data_slots
 
 type EPGInfoProps = {};
 

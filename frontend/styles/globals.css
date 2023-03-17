@@ -26,10 +26,19 @@ body {
     font-family: 'NBInter', serif;
 }
 
-.red-wavy-underline {
+.epg-wavy {
     text-decoration-line: underline;
-    text-decoration-color: red;
     text-decoration-style: wavy;
+}
+
+.epg-dashed {
+    text-decoration-line: underline;
+    text-decoration: dashed;
+}
+
+.epg-double {
+    text-decoration-line: underline;
+    text-decoration: double;
 }
 
 a {

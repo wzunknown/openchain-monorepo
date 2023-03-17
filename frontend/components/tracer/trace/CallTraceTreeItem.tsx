@@ -313,14 +313,16 @@ export const CallTraceTreeItem = (props: CallTraceTreeItemProps) => {
         valueNode = <span style={{ color: '#c94922' }}>{`[${formatEther(value)} ${chainConfig.nativeSymbol}]`}</span>;
     }
 
-    let nodeHighlight = '';
+    // ================ wz ====================
+    let nodeHighlightStyle = '';
     if (globalThis.epg_highlight_nodes.includes(node.path)) {
-        nodeHighlight = 'red-wavy-underline';
+        nodeHighlightStyle = globalThis.epg_highlight_stylemap[node.path];
     }
+    // ========================================
 
     let treeContent = (
         <>
-        <span className={nodeHighlight}>
+        <span style={{'text-decoration': nodeHighlightStyle}}>
             <TraceTreeNodeLabel
                 nodeType={node.variant}
                 nodeColor={callColor[node.variant]}
