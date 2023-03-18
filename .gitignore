@@ -136,4 +136,4 @@ cmd/signature-scraper-srv
 services/signature-scraper-srv
 
 tmp/
-
+__pycache__/
