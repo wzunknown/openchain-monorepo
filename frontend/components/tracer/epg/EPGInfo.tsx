@@ -9,8 +9,8 @@ import { IconButton, Button } from '@mui/material';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
 
 // TODO: tmp using local datas
-import _map_data from '../../../tmp/e2e4-map.json'
-import _highlight_data from '../../../tmp/e2e4-highlight.json'
+import _map_data from '../../../tmp/map.json'
+import _highlight_data from '../../../tmp/highlight.json'
 interface MappingObject {
     [key: string]: string;
 }
