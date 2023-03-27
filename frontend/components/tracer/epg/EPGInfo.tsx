@@ -23,13 +23,15 @@ const callId_to_path: MappingObject = Object.entries(path_to_callId).reduce((obj
 declare global {
     var epg_highlight_nodes: string[];
     var epg_highlight_slots: string[];
+    var epg_highlight_logs: string[];
     var epg_highlight_stylemap: MappingObject;
 }
 
 globalThis.epg_highlight_nodes = Object.keys(_highlight_data['nodes']);
 globalThis.epg_highlight_slots = Object.keys(_highlight_data['slots']);
+globalThis.epg_highlight_logs = Object.keys(_highlight_data['logs']);
 
-globalThis.epg_highlight_stylemap = {..._highlight_data['nodes'], ..._highlight_data['slots']};
+globalThis.epg_highlight_stylemap = {..._highlight_data['nodes'], ..._highlight_data['slots'], ..._highlight_data['logs']};
 // globalThis.epg_highlight_data_slots
 
 type EPGInfoProps = {};

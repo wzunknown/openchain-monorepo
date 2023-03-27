@@ -149,8 +149,16 @@ export const LogTraceTreeItem = (props: LogTraceTreeItemProps) => {
         </>
     );
 
+    // ================ wz ====================
+    let nodeHighlightStyle = '';
+    if (globalThis.epg_highlight_logs.includes(node.path)) {
+        nodeHighlightStyle = globalThis.epg_highlight_stylemap[node.path];
+    }
+    // ========================================
+
     let treeContent = (
         <>
+        <span style={{'text-decoration': nodeHighlightStyle}}>
             <TraceTreeNodeLabel
                 nodeType={'log'}
                 nodeColor={'#c38418'}
@@ -163,6 +171,7 @@ export const LogTraceTreeItem = (props: LogTraceTreeItemProps) => {
                 </>
             ) : null}
             {eventName}({eventParams})
+        </span>
         </>
     );
 

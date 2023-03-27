@@ -74,12 +74,12 @@ def get_openchain_trace(tx_hash):
 
 
 def reentrancy_example(g: GraphTraversalSource, args):
-    from epg_traverse import reentrancy_control_dependency_traverse, reentrancy_filter
+    import epg_traverse
     
     attacks = []
     
-    for res in reentrancy_control_dependency_traverse(g):
-        if reentrancy_filter(res):
+    for res in epg_traverse.reentrancy_amount_dependency_traverse(g):
+        if epg_traverse.reentrancy_filter(res):
             attacks.append(res)
     
     epg_graph = nx.read_graphml(args.graphml)
@@ -87,13 +87,15 @@ def reentrancy_example(g: GraphTraversalSource, args):
     callId_to_path, path_to_callId = match_path_callId(openchain_trace, epg_graph)
 
     style = 'underline wavy {color}'
-    highlight = {'nodes': {}, 'slots': {}}
+    highlight = {'nodes': {}, 'slots': {}, 'logs': {}}
     for idx, atk in enumerate(attacks):
         nodes = []
         slots = []
+        logs = []
         dcfgId = atk['victim_flow_dcfg']['dcfgId']
-        victim_flow_callId = dcfgId.split('-')[0] + ':' + dcfgId.split('-')[-1]
-        nodes += [victim_flow_callId, atk['victim']['callId'], atk['reentry']['callId']]
+        victim_flow_log_call_path = callId_to_path[dcfgId.split('-')[0]]
+        victim_flow_log_callCnt = int(dcfgId.split('-')[-1])
+        nodes += [dcfgId.split('-')[0], atk['victim']['callId'], atk['re_victim']['callId'], atk['attacker']['callId'], atk['re_attacker']['callId']]
         nodes = [callId_to_path[v] for v in nodes]
 
         state_slot = atk['state_change']['sourceLocation'].split(':')[1]
@@ -109,8 +111,21 @@ def reentrancy_example(g: GraphTraversalSource, args):
             if child['type'] in ['sload', 'sstore'] and child['slot'] == state_slot:
                 slots.append(child['path'])
         
+        curr_node = openchain_trace['entrypoint']
+        for idx_str in victim_flow_log_call_path.split('.')[1:]:
+            curr_node = curr_node['children'][int(idx_str)]
+        
+        callCnt = 0
+        for child in curr_node['children']:
+            if victim_flow_log_callCnt == callCnt and child['type'] == 'log':
+                logs.append(child['path'])
+                break
+            if child['type'] == 'call':
+                callCnt += 1
+        
         highlight['nodes'].update({x: style.format(color=COLOR_PALETTE[idx % len(COLOR_PALETTE)]) for x in nodes})
         highlight['slots'].update({x: style.format(color=COLOR_PALETTE[idx % len(COLOR_PALETTE)]) for x in slots})
+        highlight['logs'].update({x: style.format(color=COLOR_PALETTE[idx % len(COLOR_PALETTE)]) for x in logs})
     
     logger.info(f'output to {args.output_dir}/map.json and {args.output_dir}/highlight.json')
     with open('%s/map.json' % (args.output_dir,), 'wb') as f:
@@ -137,6 +152,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
     
     g = traversal().withRemote(DriverRemoteConnection(args.gremlin_url,'g'))
+    g.V().drop().iterate()
+    g.io(args.graphml).read().iterate()
     
     #====== reentrancy example =======
     reentrancy_example(g, args)
