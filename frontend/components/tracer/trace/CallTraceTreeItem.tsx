@@ -212,6 +212,9 @@ export const CallTraceTreeItem = (props: CallTraceTreeItemProps) => {
                     Trace Path: <code>{node.path}</code>
                 </Grid>
                 <Grid item>
+                    EPG CallId: <code>{globalThis.epg_path_to_callId[node.path]}</code>
+                </Grid>
+                <Grid item>
                     Type: <code>{node.variant}</code>
                 </Grid>
                 <Grid item>

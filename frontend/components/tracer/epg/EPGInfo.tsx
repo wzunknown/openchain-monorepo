@@ -14,18 +14,21 @@ import _highlight_data from '../../../tmp/highlight.json'
 interface MappingObject {
     [key: string]: string;
 }
-const path_to_callId: MappingObject = _map_data;
-const callId_to_path: MappingObject = Object.entries(path_to_callId).reduce((obj: MappingObject, [key, value]) => {
-    obj[value] = key;
-    return obj;
-}, {});
 
 declare global {
     var epg_highlight_nodes: string[];
     var epg_highlight_slots: string[];
     var epg_highlight_logs: string[];
     var epg_highlight_stylemap: MappingObject;
+    var epg_path_to_callId: MappingObject;
+    var epg_callId_to_path: MappingObject;
 }
+
+globalThis.epg_path_to_callId = _map_data;
+globalThis.epg_callId_to_path = Object.entries(globalThis.epg_path_to_callId).reduce((obj: MappingObject, [key, value]) => {
+    obj[value] = key;
+    return obj;
+}, {});
 
 globalThis.epg_highlight_nodes = Object.keys(_highlight_data['nodes']);
 globalThis.epg_highlight_slots = Object.keys(_highlight_data['slots']);
@@ -44,7 +47,7 @@ export const EPGInfo = () => {
         if (ev.key === 'Enter') {
             let val = '';
             if (callId_value !== '') {
-                val = callId_to_path[callId_value] || 'wrong';
+                val = globalThis.epg_callId_to_path[callId_value] || 'wrong';
             }
             set_path_value(val);
         }
@@ -54,7 +57,7 @@ export const EPGInfo = () => {
         if (ev.key === 'Enter') {
             let val = '';
             if (path_value !== '') {
-                val = path_to_callId[path_value] || 'wrong';
+                val = globalThis.epg_path_to_callId[path_value] || 'wrong';
             }
             set_callId_value(val);
         }

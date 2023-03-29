@@ -491,6 +491,15 @@ export const TraceTree = (props: TraceTreeProps) => {
             expandToNode(wz_show_path_value);
         }
     };
+    const [wz_show_callId, wz_set_show_callId] = React.useState('');
+    const wz_handle_show_callId = (ev: React.KeyboardEvent) => {
+        if (ev.key === 'Enter' && wz_show_callId in globalThis.epg_callId_to_path) {
+            var path = globalThis.epg_callId_to_path[wz_show_callId];
+            if (path in traceMetadata.nodesByPath) {
+                expandToNode(path);
+            }
+        }
+    }
     // ===============================================
 
     const treeItems = React.useMemo(() => {
@@ -503,6 +512,11 @@ export const TraceTree = (props: TraceTreeProps) => {
                     onKeyDown={wz_handle_show_path}
                     value={wz_show_path_value}
                     onChange={(ev) => wz_set_show_path_value(ev.target.value)} />
+                <br /><br />
+                <TextField label='show callId'
+                    onKeyDown={wz_handle_show_callId}
+                    value={wz_show_callId}
+                    onChange={(ev) => wz_set_show_callId(ev.target.value)} />
             </Box>
             <TreeView
                 aria-label="rich object"
